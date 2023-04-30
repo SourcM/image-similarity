@@ -7,9 +7,9 @@ from scipy.spatial.distance import cdist
 
 # ext2 = ('jpg', 'png', 'jpeg', 'JPG', 'PNG', 'JPEG')
 
-def extract_feat(sess, filename):
+def extract_feat(sess, filename, input_size):
     img = Image.open(filename)
-    img = img.resize((256, 256))
+    img = img.resize((input_size, input_size))
     img  = np.array(img)
     img = img.astype(np.float32)
     img = img/255
@@ -48,10 +48,11 @@ def main(args):
     anchor_image = args.anchor_path
     probe_image = args.probe_path
     threshold = args.threshold
+    input_size = args.input_size
     sess = load_onnx_model(args.model_path)
      
-    anchor_feat = extract_feat(sess, anchor_image)
-    probe_feat  = extract_feat(sess, probe_image)
+    anchor_feat = extract_feat(sess, anchor_image, input_size)
+    probe_feat  = extract_feat(sess, probe_image, input_size)
 
     pscore = 1 - cdist(anchor_feat.reshape(1, -1), probe_feat.reshape(1, -1), 'cosine').item()
     
@@ -79,7 +80,8 @@ def parse_args():
     parser.add_argument('-c', '--probe_path', action='store', help='absolute path to the probe image', required=True)
     parser.add_argument('-t', '--threshold', action='store', help='threshold between 0 and 1', default=0.8,  type=float, required=False)
     parser.add_argument('-m', '--model_path', action='store', help='absolute path to the onnx model', required=True)
-            
+    parser.add_argument('-s', '--input_size', action='store', help='input size expected by the model',  default=256, type=int, required=False)
+    
     args = parser.parse_args()
     return args
 
