@@ -79,7 +79,7 @@ def parse_args():
     parser.add_argument('-a', '--anchor_path', action='store', help='absolute path to the anchor image', required=True)
     parser.add_argument('-c', '--probe_path', action='store', help='absolute path to the probe image', required=True)
     parser.add_argument('-t', '--threshold', action='store', help='threshold between 0 and 1', default=0.8,  type=float, required=False)
-    parser.add_argument('-m', '--model_path', action='store', help='absolute path to the onnx model', required=True)
+    parser.add_argument('-m', '--model_path', action='store', help='absolute path to the onnx model', default='similarity-model.onnx', required=False)
     parser.add_argument('-s', '--input_size', action='store', help='input size expected by the model',  default=256, type=int, required=False)
     
     args = parser.parse_args()
